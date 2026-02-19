@@ -6,15 +6,28 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- Preloader ---
-  const preloader = document.getElementById('preloader');
-  if (preloader) {
-    window.addEventListener('load', () => {
-      setTimeout(() => preloader.classList.add('hidden'), 600);
-      setTimeout(() => { if (preloader.parentNode) preloader.parentNode.removeChild(preloader); }, 1100);
-    });
-    // Fallback: hide preloader after 3s max
-    setTimeout(() => { if (preloader) preloader.classList.add('hidden'); }, 3000);
-  }
+const preloader = document.getElementById('preloader');
+
+function hidePreloader() {
+  if (!preloader || preloader.classList.contains('hidden')) return;
+
+  preloader.classList.add('hidden');
+
+  // remove after transition
+  setTimeout(() => {
+    preloader.remove();
+  }, 500);
+}
+
+// DOM ready (fast)
+document.addEventListener('DOMContentLoaded', hidePreloader);
+
+// full load (backup)
+window.addEventListener('load', hidePreloader);
+
+// absolute fallback
+setTimeout(hidePreloader, 2500);
+
 
   // --- Header scroll effect ---
   const header = document.getElementById('header');
